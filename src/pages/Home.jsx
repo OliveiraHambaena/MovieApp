@@ -3,8 +3,10 @@ import MovieDetail from "../components/MovieDetail";
 import { useState, useEffect } from "react";
 import { searchMovies, getPopularMovies } from "../services/api";
 import "../css/Home.css";
+import { useLocation } from "react-router-dom";
 
 function Home() {
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
@@ -26,6 +28,12 @@ function Home() {
 
     loadPopularMovies();
   }, []);
+
+  useEffect(() => {
+    // Reset search state here
+    setSearchQuery("");
+    setMovies([]);
+  }, [location.pathname]); // Reset when path changes
 
   const handleSearch = async (e) => {
     e.preventDefault();
