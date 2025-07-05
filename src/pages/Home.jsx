@@ -35,6 +35,20 @@ function Home() {
     setMovies([]);
   }, [location.pathname]); // Reset when path changes
 
+  useEffect(() => {
+    // When navigating to "/", reset search and load popular movies
+    if (location.pathname === "/") {
+      setSearchQuery("");
+      setError(null);
+      setSelectedMovieId(null);
+      setLoading(true);
+      getPopularMovies()
+        .then((popularMovies) => setMovies(popularMovies))
+        .catch(() => setError("Failed to load movies..."))
+        .finally(() => setLoading(false));
+    }
+  }, [location.pathname]);
+
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;

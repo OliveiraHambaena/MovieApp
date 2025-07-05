@@ -19,7 +19,7 @@ function NavBar() {
       <div className="navbar-links">
         <Link to="/">Home</Link>
         <Link to="/favorites">Favorites</Link>
-        <button onClick={handleLogout}>Logooout</button>
+        <button onClick={handleLogout}>Logout</button>
       </div>
     </nav>
   );
