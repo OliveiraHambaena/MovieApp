@@ -23,7 +23,7 @@ This is a React-based movie application that allows users to browse popular movi
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/OliveiraHambaena/my-coding-projects.git
-   cd "Movie App/M"
+   cd "Movie App"
    ```
    2.**Install Dependencies**:
    npm install
