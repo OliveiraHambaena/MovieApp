@@ -56,6 +56,9 @@ function Login() {
           <button type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
+          <div>
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </div>
         </form>
         <p>
           Don't have an account? <Link to="/register">Register</Link>
