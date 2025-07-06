@@ -44,3 +44,11 @@ export const searchTVShows = async (query) => {
   const data = await response.json();
   return data.results;
 };
+
+export async function getTVShowVideos(tvId) {
+  const res = await fetch(
+    `${BASE_URL}/tv/${tvId}/videos?api_key=${API_KEY}`
+  );
+  const data = await res.json();
+  return data.results;
+}

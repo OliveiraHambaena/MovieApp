@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { getPopularTVShows, searchTVShows } from "../services/api";
 import MovieCard from "../components/MovieCard"; // Reuse MovieCard for TV shows
+import TVShowDetail from "../components/TVShowDetail";
 
 function TVShows() {
   const [shows, setShows] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedShowId, setSelectedShowId] = useState(null);
 
   useEffect(() => {
     getPopularTVShows()
@@ -54,11 +56,21 @@ function TVShows() {
       ) : (
         <div className="movies-grid">
           {shows.map((show) => (
-            <div key={show.id}>
+            <div
+              key={show.id}
+              onClick={() => setSelectedShowId(show.id)}
+              style={{ cursor: "pointer" }}
+            >
               <MovieCard movie={show} />
             </div>
           ))}
         </div>
+      )}
+      {selectedShowId && (
+        <TVShowDetail
+          tvId={selectedShowId}
+          onClose={() => setSelectedShowId(null)}
+        />
       )}
     </div>
   );
