@@ -1,7 +1,12 @@
 import MovieCard from "../components/MovieCard";
 import MovieDetail from "../components/MovieDetail";
 import { useState, useEffect } from "react";
-import { searchMovies, getPopularMovies } from "../services/api";
+import {
+  searchMovies,
+  getPopularMovies,
+  getGenres,
+  getMoviesByGenre,
+} from "../services/api";
 import "../css/Home.css";
 import { useLocation } from "react-router-dom";
 
@@ -12,6 +17,8 @@ function Home() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
+  const [genres, setGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState("");
 
   useEffect(() => {
     const loadPopularMovies = async () => {
@@ -49,6 +56,13 @@ function Home() {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    // Fetch genres on mount
+    getGenres()
+      .then(setGenres)
+      .catch(() => setGenres([]));
+  }, []);
+
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
@@ -71,6 +85,27 @@ function Home() {
     setSelectedMovieId(movieId);
   };
 
+  const handleGenreChange = async (e) => {
+    const genreId = e.target.value;
+    setSelectedGenre(genreId);
+    setSearchQuery(""); // Clear search query if searching by genre
+    setLoading(true);
+    setError(null);
+    try {
+      if (genreId) {
+        const moviesByGenre = await getMoviesByGenre(genreId);
+        setMovies(moviesByGenre);
+      } else {
+        const popularMovies = await getPopularMovies();
+        setMovies(popularMovies);
+      }
+    } catch {
+      setError("Failed to load movies...");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="home">
       <form onSubmit={handleSearch} className="search-form">
@@ -85,6 +120,20 @@ function Home() {
           Search
         </button>
       </form>
+
+      <div style={{ margin: "1em 0" }}>
+        <label>
+          Filter by Genre:{" "}
+          <select value={selectedGenre} onChange={handleGenreChange}>
+            <option value="">All Genres</option>
+            {genres.map((genre) => (
+              <option key={genre.id} value={genre.id}>
+                {genre.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
 
       {error && <div className="error-message">{error}</div>}
 
