@@ -5,6 +5,7 @@ function TVShowDetail({ tvId, onClose }) {
   const [trailerKey, setTrailerKey] = useState(null);
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     async function fetchDetails() {
@@ -28,13 +29,42 @@ function TVShowDetail({ tvId, onClose }) {
       <div>
         <strong>Genres: </strong>
         {genres.length > 0 ? (
-          <select>
-            {genres.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
-              </option>
-            ))}
-          </select>
+          <div style={{ display: "inline-block", position: "relative" }}>
+            <button
+              onClick={() => setShowDropdown((v) => !v)}
+              style={{
+                padding: "0.5em 1em",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                background: "#f0f0f0",
+                cursor: "pointer",
+              }}
+            >
+              Select Genre
+            </button>
+            {showDropdown && (
+              <ul
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: "2em",
+                  background: "#fff",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  listStyle: "none",
+                  margin: 0,
+                  padding: "0.5em",
+                  zIndex: 10,
+                }}
+              >
+                {genres.map((g) => (
+                  <li key={g.id} style={{ padding: "0.25em 0" }}>
+                    {g.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         ) : (
           "No genres found."
         )}
