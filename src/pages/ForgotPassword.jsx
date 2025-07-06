@@ -1,17 +1,27 @@
 import { useState } from "react";
+import { supabase } from "../supabaseClient"; // adjust path as needed
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement password reset logic (API call)
-    setMessage("If this email exists, a reset link has been sent.");
+    setMessage("");
+    setError("");
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://your-app-url.com/reset-password", // set to your frontend reset page
+    });
+    if (error) {
+      setError(error.message);
+    } else {
+      setMessage("If this email exists, a reset link has been sent.");
+    }
   };
 
   return (
-    <div className="forgot-password">
+    <div>
       <h2>Forgot Password</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -23,7 +33,8 @@ function ForgotPassword() {
         />
         <button type="submit">Send Reset Link</button>
       </form>
-      {message && <div>{message}</div>}
+      {message && <div style={{ color: "green" }}>{message}</div>}
+      {error && <div style={{ color: "red" }}>{error}</div>}
     </div>
   );
 }
