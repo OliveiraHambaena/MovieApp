@@ -10,6 +10,8 @@ import { MovieProvider } from "./contexts/MovieContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { useAuth } from "./contexts/AuthContext";
 import NavBar from "./components/NavBar";
+import { useEffect, useState } from "react";
+import { supabase } from "./supabaseClient";
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -28,6 +30,32 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   const location = useLocation();
+  const [isPasswordReset, setIsPasswordReset] = useState(false);
+
+  useEffect(() => {
+    // Check if the current URL is /reset-password and if Supabase session type is "PASSWORD_RECOVERY"
+    const hash = window.location.hash;
+    const isResetRoute = location.pathname === "/reset-password";
+    const session = supabase.auth.getSession ? null : null; // fallback if not using v2
+    // For Supabase v2, use the async method:
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (
+        isResetRoute &&
+        session &&
+        session.user &&
+        session.user.email &&
+        session.user.app_metadata &&
+        session.user.app_metadata.provider &&
+        session.user.app_metadata.provider === "email"
+      ) {
+        // Optionally, you can check for session type if available
+        setIsPasswordReset(true);
+      } else {
+        setIsPasswordReset(false);
+      }
+    });
+  }, [location.pathname]);
+
   return (
     <AuthProvider>
       <MovieProvider>
@@ -37,7 +65,12 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route
+              path="/reset-password"
+              element={
+                isPasswordReset ? <ResetPassword /> : <Navigate to="/" />
+              }
+            />
             <Route
               path="/"
               element={
