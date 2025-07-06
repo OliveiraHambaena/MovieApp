@@ -73,6 +73,7 @@ function Home() {
       const searchResults = await searchMovies(searchQuery);
       setMovies(searchResults);
       setError(null);
+      setSelectedGenre(""); // Clear genre filter when searching
     } catch (err) {
       console.log(err);
       setError("Failed to search movies...");
