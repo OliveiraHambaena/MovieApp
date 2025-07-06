@@ -8,9 +8,8 @@ function ResetPassword() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Exchange the access_token in the hash for a session
     const hash = window.location.hash;
-    if (hash) {
+    if (hash && hash.includes("access_token")) {
       supabase.auth
         .exchangeCodeForSession(hash)
         .then(({ error }) => {
@@ -19,12 +18,12 @@ function ResetPassword() {
           }
           setLoading(false);
         })
-        .catch(() => {
+        .catch((err) => {
           setError("Invalid or expired reset link.");
           setLoading(false);
         });
     } else {
-      setError("No reset token found.");
+      setError("No reset token found in the URL.");
       setLoading(false);
     }
   }, []);
