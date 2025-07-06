@@ -12,6 +12,7 @@ import { useAuth } from "./contexts/AuthContext";
 import NavBar from "./components/NavBar";
 import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
+import TVShows from "./pages/TVShows";
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -66,6 +67,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Favorites />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tvshows"
+              element={
+                <ProtectedRoute>
+                  <TVShows />
                 </ProtectedRoute>
               }
             />

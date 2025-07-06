@@ -14,10 +14,11 @@ function NavBar() {
   return (
     <nav className="navbar">
       <div className="nav-brand">
-        <Link to="/">Movie1 App</Link>
+        <Link to="/">Movie App</Link>
       </div>
       <div className="navbar-links">
         <Link to="/">Home</Link>
+        <Link to="/tvshows">TV Shows</Link>
         <Link to="/favorites">Favorites</Link>
         <button onClick={handleLogout}>Logout</button>
       </div>
