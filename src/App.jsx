@@ -30,31 +30,13 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   const location = useLocation();
-  const [isPasswordReset, setIsPasswordReset] = useState(false);
 
-  useEffect(() => {
-    // Check if the current URL is /reset-password and if Supabase session type is "PASSWORD_RECOVERY"
-    const hash = window.location.hash;
-    const isResetRoute = location.pathname === "/reset-password";
-    const session = supabase.auth.getSession ? null : null; // fallback if not using v2
-    // For Supabase v2, use the async method:
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (
-        isResetRoute &&
-        session &&
-        session.user &&
-        session.user.email &&
-        session.user.app_metadata &&
-        session.user.app_metadata.provider &&
-        session.user.app_metadata.provider === "email"
-      ) {
-        // Optionally, you can check for session type if available
-        setIsPasswordReset(true);
-      } else {
-        setIsPasswordReset(false);
-      }
-    });
-  }, [location.pathname]);
+  // Check for access_token in the URL (Supabase sends this for password reset)
+  const isPasswordReset =
+    location.pathname === "/reset-password" &&
+    new URLSearchParams(window.location.hash.replace("#", "?")).get(
+      "access_token"
+    );
 
   return (
     <AuthProvider>
