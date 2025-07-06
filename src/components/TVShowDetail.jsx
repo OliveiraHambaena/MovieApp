@@ -27,9 +27,17 @@ function TVShowDetail({ tvId, onClose }) {
     <div className="trailer-modal">
       <div>
         <strong>Genres: </strong>
-        {genres.length > 0
-          ? genres.map((g) => g.name).join(", ")
-          : "No genres found."}
+        {genres.length > 0 ? (
+          <select>
+            {genres.map((g) => (
+              <option key={g.id} value={g.id}>
+                {g.name}
+              </option>
+            ))}
+          </select>
+        ) : (
+          "No genres found."
+        )}
       </div>
       {trailerKey ? (
         <iframe
