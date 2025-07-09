@@ -26,49 +26,6 @@ function TVShowDetail({ tvId, onClose }) {
 
   return (
     <div className="trailer-modal">
-      <div>
-        <strong>Genres: </strong>
-        {genres.length > 0 ? (
-          <div style={{ display: "inline-block", position: "relative" }}>
-            <button
-              onClick={() => setShowDropdown((v) => !v)}
-              style={{
-                padding: "0.5em 1em",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-                background: "#f0f0f0",
-                cursor: "pointer",
-              }}
-            >
-              Select Genre
-            </button>
-            {showDropdown && (
-              <ul
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: "2em",
-                  background: "#fff",
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                  listStyle: "none",
-                  margin: 0,
-                  padding: "0.5em",
-                  zIndex: 10,
-                }}
-              >
-                {genres.map((g) => (
-                  <li key={g.id} style={{ padding: "0.25em 0" }}>
-                    {g.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ) : (
-          "No genres found."
-        )}
-      </div>
       {trailerKey ? (
         <iframe
           width="100%"
